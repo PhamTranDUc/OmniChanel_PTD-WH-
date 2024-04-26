@@ -76,6 +76,11 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 //                Pair.of("/api/v1/products","GET"),
 //                Pair.of("/test","GET"),
 //                Pair.of("/api/v1/categories","GET"),
+                Pair.of("/","GET"),
+                Pair.of("/","POST"),
+                Pair.of("/","PUT"),
+
+                Pair.of("/omni-chat","GET"),
                 Pair.of("/api/v1/users/login","POST"),
                 Pair.of("/api/v1/users/register","POST")
 //                http://localhost:8080/ShopBookPTD

@@ -31,9 +31,12 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(
                         requests ->{
                             requests.requestMatchers(
+                                            "/omni-chat",
                                             "/api/v1/users/login","/test",
                                             "/api/v1/users/register"
+
                                     ).permitAll()
+                                    //.requestMatchers(HttpMethod.GET,"/omni-chat").permitAll()
                                     .requestMatchers(HttpMethod.GET,"/api/v1/products/**",
                                             "/api/v1/categories/**").permitAll()
                                     .requestMatchers(HttpMethod.GET,"/upload/**"
@@ -48,8 +51,9 @@ public class WebSecurityConfig {
                                     .requestMatchers(HttpMethod.POST,"/api/v1/admin/**").hasRole("ADMIN")
                                     .requestMatchers(HttpMethod.PUT,"/api/v1/admin/**").hasRole("ADMIN")
                                     .requestMatchers(HttpMethod.DELETE,"/api/v1/admin/**").hasRole("ADMIN")
-                                    .anyRequest().authenticated();
+                                    .anyRequest().permitAll();
                         }
+
                 );
 
         http.cors(new Customizer<CorsConfigurer<HttpSecurity>>() {

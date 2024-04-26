@@ -8,6 +8,7 @@ import com.example.omnichannelfinal.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,8 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @PostMapping("/register")
     public ResponseEntity<?> createUser(@RequestBody UserDto userDto, BindingResult result){
@@ -53,16 +56,25 @@ public class UserController {
     }
 
     @PutMapping("/updatePassword")
-    public ResponseEntity<?> updatePassword(@RequestHeader("Authorization") String token, @RequestBody PasswordUpdateDto password){
+    public ResponseEntity<?> updatePassword(@RequestHeader("Authorization") String token, @RequestBody PasswordUpdateDto password) {
 
-        try{
-            token= token.substring(7);
-//            String roleName= userService.getRoleByToken(token);
-            User user= userService.getUserByToken(token);
-            User userAfterUpdate=userService.updatePassword(password.getPassword(),token);
-            return ResponseEntity.ok().body(userAfterUpdate);
-        }catch (Exception e){
+        try {
+            token = token.substring(7);
+            User user = userService.getUserByToken(token);
+
+            // Kiểm tra xem mật khẩu mới có trùng khớp với mật khẩu cũ hay không
+            if (bCryptPasswordEncoder.matches(password.getPassword(), user.getPassword())) {
+                // Mật khẩu cũ trùng khớp, tiếp tục cập nhật mật khẩu mới
+//                User userAfterUpdate = userService.updatePassword(password.getPassword(), token);
+                return ResponseEntity.ok().body("Password mới trùng với password cũ");
+            } else {;
+                User userAfterUpdate=userService.updatePassword(password.getPassword(),token);
+                return ResponseEntity.ok().body(userAfterUpdate);
+            }
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+
 }
