@@ -66,7 +66,8 @@ public class UserController {
             if (bCryptPasswordEncoder.matches(password.getPassword(), user.getPassword())) {
                 // Mật khẩu cũ trùng khớp, tiếp tục cập nhật mật khẩu mới
 //                User userAfterUpdate = userService.updatePassword(password.getPassword(), token);
-                return ResponseEntity.ok().body("Password mới trùng với password cũ");
+                com.example.omnichannelfinal.response.ResponseEntity responseEntity= new com.example.omnichannelfinal.response.ResponseEntity("Password mới trùng với password cũ");
+                return ResponseEntity.badRequest().body(responseEntity);
             } else {;
                 User userAfterUpdate=userService.updatePassword(password.getPassword(),token);
                 return ResponseEntity.ok().body(userAfterUpdate);
