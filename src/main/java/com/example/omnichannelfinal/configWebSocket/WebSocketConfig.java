@@ -1,4 +1,4 @@
-package com.example.omnichannelfinal.config;
+package com.example.omnichannelfinal.configWebSocket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +21,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.enableSimpleBroker("/user");
         registry.setApplicationDestinationPrefixes("/app");
+
+//        registry.setUserDestinationPrefix("/user");
         registry.setUserDestinationPrefix("/user/{userId}/**");
     }
 
