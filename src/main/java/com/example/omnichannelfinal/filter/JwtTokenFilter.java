@@ -79,10 +79,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 Pair.of("/","GET"),
                 Pair.of("/","POST"),
                 Pair.of("/","PUT"),
-
                 Pair.of("/omni-chat","GET"),
                 Pair.of("/api/v1/users/login","POST"),
-                Pair.of("/api/v1/users/register","POST")
+                Pair.of("/api/v1/users/register","POST"),
+                Pair.of("/api/v1/users/detail","POST"),
+                Pair.of("/test2","GET"),
+                Pair.of("/hello","GET")
 //                http://localhost:8080/ShopBookPTD
         );
         for(Pair<String,String> bypassToken: byPassTokens){

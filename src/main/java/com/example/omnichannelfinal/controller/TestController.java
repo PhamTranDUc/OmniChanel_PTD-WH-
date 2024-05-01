@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController()
 public class TestController {
 
-    @GetMapping("/omni-chat")
+    @GetMapping("/test")
     public ResponseEntity<?> getChatHomePage() throws Exception {
 
         return ResponseEntity.status(HttpStatus.OK).body("Hello Omni-chanel");

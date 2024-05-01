@@ -41,8 +41,10 @@ public class WebSecurityConfig {
                                             "/api/v1/categories/**").permitAll()
                                     .requestMatchers(HttpMethod.GET,"/upload/**"
                                     ).permitAll()
-                                    .requestMatchers(HttpMethod.POST,"api/v1/users/detail"
-                                    ).authenticated()
+//                                    .requestMatchers(HttpMethod.POST,"api/v1/users/detail"
+//                                    ).authenticated()
+//                                    .requestMatchers(HttpMethod.GET,"/test2"
+//                                    ).authenticated()
                                     .requestMatchers(HttpMethod.GET,"/api/v1/omni-chanel/**").hasRole("PAGE1")
                                     .requestMatchers(HttpMethod.POST,"/api/v1/omni-chanel/**").hasRole("PAGE1")
                                     .requestMatchers(HttpMethod.PUT,"/api/v1/omni-chanel/**").hasRole("PAGE1")
@@ -70,5 +72,20 @@ public class WebSecurityConfig {
             }
         });
         return http.build();
+
+//        http.cors(cors -> {
+//            CorsConfiguration configuration = new CorsConfiguration();
+//            configuration.setAllowedOrigins(List.of("http://localhost:4200")); // Thay thế với nguồn cụ thể
+//            configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+//            configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
+//            configuration.setExposedHeaders(List.of("x-auth-token"));
+//            configuration.setAllowCredentials(true); // Cho phép credentials
+//            UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//            source.registerCorsConfiguration("/**", configuration);
+//            cors.configurationSource(source);
+//        });
+//
+//        return http.build();
+
     }
 }

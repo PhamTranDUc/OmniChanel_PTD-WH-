@@ -22,12 +22,10 @@ public class SecurityConfig {
         return username -> userRepository
                 .findByUserName(username)
                 .orElseThrow(()-> new UsernameNotFoundException("Not found user with UserName = "+ username));
-
     }
 
     @Bean
     public PasswordEncoder passwordEncoder(){
-
         return new BCryptPasswordEncoder();
     }
 

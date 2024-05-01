@@ -6,7 +6,6 @@ import com.example.omnichannelfinal.dto.UserLoginDto;
 import com.example.omnichannelfinal.entity.User;
 import com.example.omnichannelfinal.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.BindingResult;
@@ -44,7 +43,7 @@ public class UserController {
 
     @PostMapping("/detail")
     public ResponseEntity<?> getRole(@RequestHeader("Authorization") String token){
-
+        System.out.println("running..");
         try{
             token= token.substring(7);
 //            String roleName= userService.getRoleByToken(token);
