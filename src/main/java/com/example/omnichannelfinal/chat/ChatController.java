@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,7 +38,7 @@ public class ChatController {
     public void processMessage(@Payload ChatMessage chatMessage) {
         System.out.println(String.format("Nhận được tin nhắn từ %s đến %s với nội dung là %s",chatMessage.getSenderId(),chatMessage.getRecipientId(),chatMessage.getContent()));
         ChatMessage savedMsg = chatMessageService.save(chatMessage);
-//        messageFaceBookService.sendMessageById(chatMessage.getRecipientId(),chatMessage.getContent());
+        messageFaceBookService.sendMessageById(chatMessage.getRecipientId(),chatMessage.getContent());
         messagingTemplate.convertAndSendToUser(
                 chatMessage.getRecipientId(), "/queue/messages",
                 new ChatNotification(
@@ -53,9 +54,13 @@ public class ChatController {
 
     // send message from page to customer with facebook
     @PostMapping("/sendMessenger/{id}")
-    public ResponseEntity<String> sendMessage(@PathVariable("id") String id, @RequestParam("message") String message) {
+    public ResponseEntity<String> sendMessage(@PathVariable("RecipientId") String idRecipient, @PathVariable("SenderId") String SenderId, @RequestParam("message") String message) {
 
-        messageFaceBookService.sendMessageById(id,message);
+        ChatMessage chatMessage= new ChatMessage();
+        chatMessage.setSenderId(SenderId);
+        chatMessage.setRecipientId(idRecipient);
+        chatMessage.setContent(message);
+        messageFaceBookService.sendMessageById(idRecipient,message);
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 
@@ -65,6 +70,7 @@ public class ChatController {
     @GetMapping("/messages/{senderId}/{recipientId}")
     public ResponseEntity<List<ChatMessage>> findChatMessages(@PathVariable String senderId,
                                                  @PathVariable String recipientId) {
+        ChatMessage chatMessage= new ChatMessage();
         return ResponseEntity
                 .ok(chatMessageService.findChatMessages(senderId, recipientId));
     }

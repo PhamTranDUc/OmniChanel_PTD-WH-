@@ -3,8 +3,11 @@ package com.example.omnichannelfinal.controller;
 import com.example.omnichannelfinal.chat.ChatController;
 import com.example.omnichannelfinal.chat.ChatMessage;
 import com.example.omnichannelfinal.chat.ChatMessageService;
+import com.example.omnichannelfinal.chat.ChatNotification;
 import com.example.omnichannelfinal.dto.WebHookPayLoad;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
@@ -15,10 +18,13 @@ import static org.springframework.core.io.support.SpringFactoriesLoader.FailureH
 
 @RestController
 @RequestMapping("/webhook")
+@RequiredArgsConstructor
 public class WebhookController {
 
     @Autowired
     private ChatMessageService chatMessageService;
+
+    private final SimpMessagingTemplate messagingTemplate;
 
     private static final String VERIFY_TOKEN = "12345";
     @GetMapping
@@ -63,6 +69,12 @@ public class WebhookController {
                 chatMessage.setContent(messaging.getMessage().getText());
 //                chatMessage.setTimestamp(dateTime);
 
+
+
+//
+
+                // Gửi tin nhắn tới client qua WebSocket
+                sendMessageToClient(chatMessage);
                 chatMessageService.save(chatMessage);
                 System.out.println(messaging);
             }
@@ -71,6 +83,17 @@ public class WebhookController {
         System.out.println("Body:"+ payload);    }
 
 
+    private void sendMessageToClient(ChatMessage chatMessage) {
+        messagingTemplate.convertAndSendToUser(
+                chatMessage.getRecipientId(), "/queue/messages",
+                new ChatNotification(
+                        chatMessage.getId(),
+                        chatMessage.getSenderId(),
+                        chatMessage.getRecipientId(),
+                        chatMessage.getContent()
+                )
+        );
+    }
 
 
 }
